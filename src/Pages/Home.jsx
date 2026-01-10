@@ -163,34 +163,36 @@ const StatusBadge = memo(({ variant = "default", className = "" }) => {
 
 
 const MainTitle = memo(() => (
-  <div className="space-y-2">
+  <div>
     <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl font-bold tracking-tight">
-      {/* Mobile layout: 2 cols, 3 rows (Aashir left, badge right in the middle, Grewal left) */}
-      <div className="grid grid-cols-[1fr_auto] grid-rows-3 items-start gap-x-4 sm:block">
-        {/* Row 1, Col 1 */}
-        <span className="relative inline-block row-start-1 col-start-1">
-          <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
-          <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-            Aashir
+      <div className="relative inline-block sm:block">
+        {/* Names always stacked */}
+        <div className="pr-44 sm:pr-0 leading-[0.92]">
+          <span className="relative block">
+            <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
+            <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+              Aashir
+            </span>
           </span>
-        </span>
 
-        {/* Row 2, Col 2 (badge floats, right column, between the names) */}
-        <div className="row-start-2 col-start-2 justify-self-end self-center -mt-2 sm:hidden">
-          <StatusBadge variant="inline" />
+          <span className="relative block">
+            <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
+            <span className="relative bg-gradient-to-r from-[#6366f1] to-[#a855f7] bg-clip-text text-transparent">
+              Grewal
+            </span>
+          </span>
         </div>
 
-        {/* Row 3, Col 1 */}
-        <span className="relative inline-block row-start-3 col-start-1 mt-2 sm:mt-0">
-          <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
-          <span className="relative bg-gradient-to-r from-[#6366f1] to-[#a855f7] bg-clip-text text-transparent">
-            Grewal
-          </span>
-        </span>
+        {/* Badge only positioned like this on mobile */}
+        <div className="sm:hidden absolute right-0 top-1/2 -translate-y-1/2">
+          <StatusBadge variant="inline" />
+        </div>
       </div>
     </h1>
   </div>
 ));
+
+
 
 
 
