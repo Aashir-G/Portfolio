@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useMemo } from "react";
+import React, { useEffect, memo, useMemo, useState } from "react";
 import { FileText, Code, Award, Globe, ArrowUpRight, Sparkles, UserCheck, Palette } from "lucide-react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -114,23 +114,44 @@ const StatCard = memo(({ icon: Icon, color, value, label, description, animation
 ));
 
 const AboutPage = () => {
-  // Memoized calculations
-  const { totalProjects, totalCertificates, YearExperience, totalGfxDesigns } = useMemo(() => {
-    const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
-    const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
-    const storedGfxDesigns = JSON.parse(localStorage.getItem("localGfxDesigns") || "[]");
-    
+  const [totals, setTotals] = useState({
+    totalProjects: 0,
+    totalCertificates: 0,
+    totalGfxDesigns: 0,
+  });
+
+  const YearExperience = useMemo(() => {
     const startDate = new Date("2024-01-01");
     const today = new Date();
-    const experience = today.getFullYear() - startDate.getFullYear() -
+    const experience =
+      today.getFullYear() -
+      startDate.getFullYear() -
       (today < new Date(today.getFullYear(), startDate.getMonth(), startDate.getDate()) ? 1 : 0);
+    return experience;
+  }, []);
 
-    return {
-      totalProjects: storedProjects.length,
-      totalCertificates: storedCertificates.length,
-      YearExperience: experience,
-      totalGfxDesigns: storedGfxDesigns.length,
+  useEffect(() => {
+    const readTotals = () => {
+      const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
+      const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
+      const storedGfxDesigns = JSON.parse(localStorage.getItem("gfxDesigns") || "[]");
+
+      setTotals({
+        totalProjects: storedProjects.length,
+        totalCertificates: storedCertificates.length,
+        totalGfxDesigns: storedGfxDesigns.length,
+      });
     };
+
+    readTotals();
+
+    // If Portfolio sets localStorage after About loads, this catches it
+    const onStorage = (e) => {
+      if (["projects", "certificates", "gfxDesigns"].includes(e.key)) readTotals();
+    };
+    window.addEventListener("storage", onStorage);
+
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
   // Optimized AOS initialization
@@ -162,7 +183,7 @@ const AboutPage = () => {
     {
       icon: Code,
       color: "from-[#6366f1] to-[#a855f7]",
-      value: totalProjects,
+      value: totals.totalProjects,
       label: "Total Projects",
       description: "Innovative web solutions crafted",
       animation: "fade-right",
@@ -170,7 +191,7 @@ const AboutPage = () => {
     {
       icon: Award,
       color: "from-[#a855f7] to-[#6366f1]",
-      value: totalCertificates,
+      value: totals.totalCertificates,
       label: "Certificates",
       description: "Professional skills validated",
       animation: "fade-up",
@@ -178,7 +199,7 @@ const AboutPage = () => {
     {
       icon: Palette,
       color: "from-[#6366f1] to-[#a855f7]",
-      value: totalGfxDesigns,
+      value: totals.totalGfxDesigns,
       label: "GFX Designs",
       description: "Creative visual designs",
       animation: "fade-up",
@@ -191,7 +212,7 @@ const AboutPage = () => {
       description: "Continuous learning journey",
       animation: "fade-left",
     },
-  ], [totalProjects, totalCertificates, totalGfxDesigns, YearExperience]);
+  ], [totals.totalProjects, totals.totalCertificates, totals.totalGfxDesigns, YearExperience]);
 
   return (
     <div
@@ -261,7 +282,7 @@ As a motivated and curious individual, I’m always excited to take on new chall
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes float {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-20px); }
