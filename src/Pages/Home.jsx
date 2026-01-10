@@ -127,13 +127,14 @@ const StatusBadge = memo(({ variant = "default", className = "" }) => {
   return (
     <div
       className={[
-        "inline-block lg:mx-0",
-        isInline ? "sm:hidden" : "hidden sm:inline-block sm:animate-float",
+        "inline-block animate-float lg:mx-0", // float stays ON everywhere
+        isInline ? "sm:hidden" : "hidden sm:inline-block", // inline shows only on mobile
         className,
       ].join(" ")}
     >
       <div className="relative group">
         <div className="absolute -inset-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-full blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+
         <div
           className={[
             "relative rounded-full bg-black/40 backdrop-blur-xl border border-white/10",
@@ -160,11 +161,12 @@ const StatusBadge = memo(({ variant = "default", className = "" }) => {
   );
 });
 
+
 const MainTitle = memo(() => (
   <div className="space-y-2">
     <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl font-bold tracking-tight">
-      {/* First name + badge (badge sits to the right on mobile) */}
-      <div className="flex items-start gap-3">
+      {/* Mobile: two columns (name left, badge right). SM+: normal layout */}
+      <div className="grid grid-cols-[1fr_auto] items-start gap-3 sm:block">
         <span className="relative inline-block">
           <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
           <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
@@ -172,10 +174,12 @@ const MainTitle = memo(() => (
           </span>
         </span>
 
-        <StatusBadge variant="inline" className="mt-1" />
+        {/* Mobile-only badge pushed to the right */}
+        <StatusBadge variant="inline" className="justify-self-end mt-1" />
       </div>
 
-      {/* Last name */}
+      <br className="hidden sm:block" />
+
       <span className="relative inline-block mt-2">
         <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
         <span className="relative bg-gradient-to-r from-[#6366f1] to-[#a855f7] bg-clip-text text-transparent">
@@ -185,6 +189,7 @@ const MainTitle = memo(() => (
     </h1>
   </div>
 ));
+
 
 const TechStack = memo(({ tech }) => (
   <div className="px-4 py-2 hidden sm:block rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-sm text-gray-300 hover:bg-white/10 transition-colors">
