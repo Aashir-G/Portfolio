@@ -193,7 +193,8 @@ export default function FullWidthTabs() {
       localStorage.setItem("projects", JSON.stringify(projectData));
       localStorage.setItem("certificates", JSON.stringify(certificateData));
       localStorage.setItem("gfxDesigns", JSON.stringify(gfxDesignsData));
-      window.dispatchEvent(new Event("storage"));
+      window.dispatchEvent(new Event("storage")); // keep this if you want
+      window.dispatchEvent(new Event("portfolioTotalsUpdated"));
     } catch (error) {
       console.error("Error fetching data:", error);
     }

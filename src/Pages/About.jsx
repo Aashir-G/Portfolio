@@ -84,7 +84,7 @@ const StatCard = memo(({ icon: Icon, color, value, label, description, animation
           data-aos-duration="1500"
           data-aos-anchor-placement="top-bottom"
         >
-          {isReady ? value : "—"}
+          {isReady ? value : "..."}
         </span>
       </div>
 
@@ -133,29 +133,51 @@ const AboutPage = () => {
   }, []);
 
   useEffect(() => {
-    const readTotals = () => {
-      const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
-      const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
-      const storedGfxDesigns = JSON.parse(localStorage.getItem("gfxDesigns") || "[]");
+  const readTotals = () => {
+    const rawProjects = localStorage.getItem("projects");
+    const rawCertificates = localStorage.getItem("certificates");
+    const rawGfxDesigns = localStorage.getItem("gfxDesigns");
 
-      setTotals({
-        totalProjects: storedProjects.length,
-        totalCertificates: storedCertificates.length,
-        totalGfxDesigns: storedGfxDesigns.length,
-      });
-      setIsReady(true);
-    };
+    // If localStorage is not set yet (first load), do NOT show 0s
+    if (!rawProjects || !rawCertificates || !rawGfxDesigns) {
+      setIsReady(false);
+      return;
+    }
 
-    readTotals();
+    const storedProjects = JSON.parse(rawProjects || "[]");
+    const storedCertificates = JSON.parse(rawCertificates || "[]");
+    const storedGfxDesigns = JSON.parse(rawGfxDesigns || "[]");
 
-    // If Portfolio sets localStorage after About loads, this catches it
-    const onStorage = (e) => {
-      if (["projects", "certificates", "gfxDesigns"].includes(e.key)) readTotals();
-    };
-    window.addEventListener("storage", onStorage);
+    setTotals({
+      totalProjects: storedProjects.length,
+      totalCertificates: storedCertificates.length,
+      totalGfxDesigns: storedGfxDesigns.length,
+    });
 
-    return () => window.removeEventListener("storage", onStorage);
-  }, []);
+    setIsReady(true);
+  };
+
+  // Try immediately
+  readTotals();
+
+  // Also retry shortly after, in case Portfolio finishes right after About mounts
+  const t = setTimeout(readTotals, 300);
+
+  window.addEventListener("portfolioTotalsUpdated", readTotals);
+
+  window.removeEventListener("portfolioTotalsUpdated", readTotals);
+
+  // Your Portfolio dispatches a fake "storage" event with no key, so just re-read on ANY storage event
+  const onStorage = () => readTotals();
+
+  window.addEventListener("storage", onStorage);
+  return () => {
+    clearTimeout(t);
+    window.addEventListener("portfolioTotalsUpdated", readTotals);
+
+    window.removeEventListener("portfolioTotalsUpdated", readTotals);
+  };
+}, []);
 
   // Optimized AOS initialization
   useEffect(() => {
