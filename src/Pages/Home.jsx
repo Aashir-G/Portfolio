@@ -165,9 +165,9 @@ const StatusBadge = memo(({ variant = "default", className = "" }) => {
 const MainTitle = memo(() => (
   <div>
     <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl font-bold tracking-tight">
-      <div className="relative inline-block sm:block">
+      <div className="relative inline-block w-fit">
         {/* Names always stacked */}
-        <div className="pr-44 sm:pr-0 leading-[0.92]">
+        <div className="relative w-fit pr-44 sm:pr-0 leading-[0.92]">
           <span className="relative block">
             <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
             <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
