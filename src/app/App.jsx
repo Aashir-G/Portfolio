@@ -9,19 +9,23 @@ import Portfolio from "../Pages/Portfolio";
 import ContactPage from "../Pages/Contact";
 import ProjectDetails from "../components/ProjectDetail";
 import WelcomeScreen from "../Pages/WelcomeScreen";
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
   return (
-    <>
-      <AnimatePresence mode="wait">
-        {showWelcome && (
-          <WelcomeScreen onLoadingComplete={() => setShowWelcome(false)} />
-        )}
-      </AnimatePresence>
-
-      {!showWelcome && (
-        <>
+    <AnimatePresence mode="wait">
+      {showWelcome ? (
+        <WelcomeScreen
+          key="welcome"
+          onLoadingComplete={() => setShowWelcome(false)}
+        />
+      ) : (
+        <motion.div
+          key="main"
+          initial={{ opacity: 0, filter: "blur(18px)" }}
+          animate={{ opacity: 1, filter: "blur(0px)" }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+        >
           <Navbar />
           <AnimatedBackground />
           <Home />
@@ -40,9 +44,9 @@ const LandingPage = ({ showWelcome, setShowWelcome }) => {
               </span>
             </center>
           </footer>
-        </>
+        </motion.div>
       )}
-    </>
+    </AnimatePresence>
   );
 };
 
@@ -68,26 +72,26 @@ function App() {
   const [showWelcome, setShowWelcome] = useState(true);
 
   return (
-  <BrowserRouter
-    future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    }}
-  >
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <LandingPage
-            showWelcome={showWelcome}
-            setShowWelcome={setShowWelcome}
-          />
-        }
-      />
-      <Route path="/project/:id" element={<ProjectPageLayout />} />
-    </Routes>
-  </BrowserRouter>
-);
+    <BrowserRouter
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <LandingPage
+              showWelcome={showWelcome}
+              setShowWelcome={setShowWelcome}
+            />
+          }
+        />
+        <Route path="/project/:id" element={<ProjectPageLayout />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App;
