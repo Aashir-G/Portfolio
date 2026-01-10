@@ -3,13 +3,13 @@ import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimest
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCniK4loN6SjdIJV8eb3vh0YhzIs-U2_b4",
-    authDomain: "portfolio-a1201.firebaseapp.com",
-    projectId: "portfolio-a1201",
-    storageBucket: "portfolio-a1201.firebasestorage.app",
-    messagingSenderId: "52831574221",
-    appId: "1:52831574221:web:ffe40194e608adcceef184",
-    measurementId: "G-9CLK56BRF6"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
   };
 
 // Initialize with a unique name
