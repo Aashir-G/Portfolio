@@ -24,9 +24,18 @@ const AnimatedCube = memo(() => {
         }
         
         .perspective-container {
-          perspective: 1000px;
-          width: 300px;
-          height: 300px;
+        --cube-size: 300px;
+        --cube-half: 150px;
+        perspective: 1000px;
+        width: var(--cube-size);
+        height: var(--cube-size);
+        }
+
+        @media (max-width: 640px) {
+        .perspective-container {
+        --cube-size: 220px;
+        --cube-half: 110px;
+          }
         }
         
         .cube-container {
@@ -47,19 +56,20 @@ const AnimatedCube = memo(() => {
         
         .cube-face {
           position: absolute;
-          width: 300px;
-          height: 300px;
+          width: var(--cube-size);
+          height: var(--cube-size);
           border: 2px solid rgba(99, 102, 241, 0.3);
           background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.1));
           backdrop-filter: blur(10px);
         }
         
-        .front  { transform: translateZ(150px); }
-        .back   { transform: rotateY(180deg) translateZ(150px); }
-        .right  { transform: rotateY(90deg) translateZ(150px); }
-        .left   { transform: rotateY(-90deg) translateZ(150px); }
-        .top    { transform: rotateX(90deg) translateZ(150px); }
-        .bottom { transform: rotateX(-90deg) translateZ(150px); }
+        
+        .front  { transform: translateZ(var(--cube-half)); }
+        .back   { transform: rotateY(180deg) translateZ(var(--cube-half)); }
+        .right  { transform: rotateY(90deg) translateZ(var(--cube-half)); }
+        .left   { transform: rotateY(-90deg) translateZ(var(--cube-half)); }
+        .top    { transform: rotateX(90deg) translateZ(var(--cube-half)); }
+        .bottom { transform: rotateX(-90deg) translateZ(var(--cube-half)); }
         
         .particle {
           position: absolute;
@@ -111,30 +121,61 @@ const AnimatedCube = memo(() => {
 }, () => true); // Never re-render this component
 
 // Memoized Components
-const StatusBadge = memo(() => (
-  <div className="inline-block animate-float lg:mx-0">
-    <div className="relative group">
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-full blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
-      <div className="relative px-3 sm:px-4 py-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10">
-        <span className="bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-transparent bg-clip-text sm:text-sm text-[0.7rem] font-medium flex items-center">
-          <Sparkles className="sm:w-4 sm:h-4 w-3 h-3 mr-2 text-blue-400" />
-          Ready to Innovate
-        </span>
+const StatusBadge = memo(({ variant = "default", className = "" }) => {
+  const isInline = variant === "inline";
+
+  return (
+    <div
+      className={[
+        "inline-block lg:mx-0",
+        isInline ? "sm:hidden" : "hidden sm:inline-block sm:animate-float",
+        className,
+      ].join(" ")}
+    >
+      <div className="relative group">
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-full blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+        <div
+          className={[
+            "relative rounded-full bg-black/40 backdrop-blur-xl border border-white/10",
+            isInline ? "px-2 py-1" : "px-3 sm:px-4 py-2",
+          ].join(" ")}
+        >
+          <span
+            className={[
+              "bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-transparent bg-clip-text font-medium flex items-center whitespace-nowrap",
+              isInline ? "text-[0.65rem]" : "sm:text-sm text-[0.7rem]",
+            ].join(" ")}
+          >
+            <Sparkles
+              className={[
+                isInline ? "w-3 h-3" : "sm:w-4 sm:h-4 w-3 h-3",
+                "mr-2 text-blue-400",
+              ].join(" ")}
+            />
+            Ready to Innovate
+          </span>
+        </div>
       </div>
     </div>
-  </div>
-));
+  );
+});
 
 const MainTitle = memo(() => (
   <div className="space-y-2">
     <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl font-bold tracking-tight">
-      <span className="relative inline-block">
-        <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
-        <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-          Aashir
+      {/* First name + badge (badge sits to the right on mobile) */}
+      <div className="flex items-start gap-3">
+        <span className="relative inline-block">
+          <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
+          <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+            Aashir
+          </span>
         </span>
-      </span>
-      <br />
+
+        <StatusBadge variant="inline" className="mt-1" />
+      </div>
+
+      {/* Last name */}
       <span className="relative inline-block mt-2">
         <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
         <span className="relative bg-gradient-to-r from-[#6366f1] to-[#a855f7] bg-clip-text text-transparent">
