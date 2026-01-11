@@ -13,40 +13,44 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 const LandingPage = ({ showWelcome, setShowWelcome }) => {
   return (
-    <AnimatePresence mode="wait">
-      {showWelcome ? (
-        <WelcomeScreen
-          key="welcome"
-          onLoadingComplete={() => setShowWelcome(false)}
-        />
-      ) : (
-        <motion.div
-          key="main"
-          initial={{ opacity: 0, filter: "blur(18px)" }}
-          animate={{ opacity: 1, filter: "blur(0px)" }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <Navbar />
-          <AnimatedBackground />
-          <Home />
-          <About />
-          <Portfolio />
-          <ContactPage />
-          <footer>
-            <center>
-              <hr className="my-3 border-gray-400 opacity-15 sm:mx-auto lg:my-6 text-center" />
-              <span className="block text-sm pb-4 text-gray-500 text-center dark:text-gray-400">
-                © 2025{" "}
-                <a href="https://flowbite.com/" className="hover:underline">
-                  Aashir™
-                </a>
-                . All Rights Reserved.
-              </span>
-            </center>
-          </footer>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <>
+      {/* Main site mounts immediately */}
+      <motion.div
+        key="main"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <Navbar />
+        <AnimatedBackground />
+        <Home />
+        <About />
+        <Portfolio />
+        <ContactPage />
+        <footer>
+          <center>
+            <hr className="my-3 border-gray-400 opacity-15 sm:mx-auto lg:my-6 text-center" />
+            <span className="block text-sm pb-4 text-gray-500 text-center dark:text-gray-400">
+              © 2025{" "}
+              <a href="https://flowbite.com/" className="hover:underline">
+                Aashir™
+              </a>
+              . All Rights Reserved.
+            </span>
+          </center>
+        </footer>
+      </motion.div>
+
+      {/* Welcome screen is only an overlay */}
+      <AnimatePresence mode="wait">
+        {showWelcome && (
+          <WelcomeScreen
+            key="welcome"
+            onLoadingComplete={() => setShowWelcome(false)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
