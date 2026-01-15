@@ -390,11 +390,9 @@ const ContactPage = () => {
 
             {/* Comments List */}
             <div className="space-y-4 h-[400px] overflow-y-auto custom-scrollbar">
-              {comments.map((comment, index) => (
+              {comments.map((comment) => (
                 <div
                   key={comment.id}
-                  data-aos="fade-up"
-                  data-aos-delay={index * 100}
                   className="p-4 rounded-xl border transition-all group hover:shadow-lg hover:-translate-y-0.5 bg-white/5 border-white/10 hover:bg-white/10"
                 >
                   <div className="flex items-start gap-3">
