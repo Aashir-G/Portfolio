@@ -219,7 +219,7 @@ export default function FullWidthTabs() {
   }, []);
 
   // Dynamically set initial items based on the number of items in each category
-  const initialProjects = projects.length > 2 ? 2 : projects.length;
+  const initialProjects = projects.length > 3 ? 3 : projects.length;
   const initialCertificates = certificates.length > 3 ? 3 : certificates.length;
   const initialGfxDesigns = gfxDesigns.length > 3 ? 3 : gfxDesigns.length;
 
